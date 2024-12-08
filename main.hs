@@ -23,9 +23,11 @@ generujPalindromy :: Int -> ([Int], Int)
 generujPalindromy n
   | n < 0 = ([], 0)
   | otherwise =
-    if palindromDziesietny(n) && palindromBinarny(zamienNaBinarny(n)) == True then
-      -- zapisuje wynik funkcji w zmiennych lista i suma po czym dodaje do liczbe do listy i sumy --
-      let (lista, suma) = generujPalindromy(n - 1) in (n : lista, suma + n) 
+    if palindromDziesietny(n) == True then
+      if palindromBinarny(zamienNaBinarny(n)) == True then
+        -- zapisuje wynik funkcji w zmiennych lista i suma po czym dodaje do liczbe do listy i sumy --
+      let (lista, suma) = generujPalindromy(n - 1) in (n : lista, suma + n)
+      else generujPalindromy(n -1)
     else generujPalindromy(n - 1)
   
 main = print(generujPalindromy(10))
