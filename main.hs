@@ -10,7 +10,7 @@ palindromDziesietny n =
 zamienNaBinarny :: Int -> String
 zamienNaBinarny n 
   | n == 0 = "0"
-  | otherwise = reverse $ zamienNaBinarny_ n
+  | otherwise = reverse (zamienNaBinarny_(n))
 
 zamienNaBinarny_ :: Int -> String
 zamienNaBinarny_ n
