@@ -1,0 +1,50 @@
+-- Funkcja do generowania listy ułamków z najdłuższymi okresami
+najdluzszyOkres :: Int -> [String]
+najdluzszyOkres n =
+    let listaUlamkow = ulamki n
+        okresy = [(l, m, dlugoscOkresu l m) | (l, m) <- listaUlamkow]
+        maxOkres = maximum [dl | (_, _, dl) <- okresy]
+        maxUlamki = [(l, m, dl) | (l, m, dl) <- okresy, dl == maxOkres]
+    in [formatRozwiniecie l m dl | (l, m, dl) <- maxUlamki]
+
+1) let listaUlamkow = ulamki n
+Tworzona jest lista ułamków postaci (1,n) dla n=9 mamy:
+listaUlamkow = [(1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9)]
+
+2) okresy = [(l, m, dlugoscOkresu l m) | (l, m) <- listaUlamkow]
+Dla każdego ułamka z poprzedniej listy dopisujemy długość jego okresu obliczonego za pomocą funkji dlugoscOkresu.
+
+Działanie funkcji dla 1/9:
+Na początu reszta mamy reszta=1, odwiedzone=[], liczba_itereacji=0
+reszta: 1 != 0 i nie ma jej w liście, więc obliczamy nową resztę, dodajemy do odwiedzonych starą i zwiększamy liczbę iteracji o 1:
+nowaReszta = 2*reszta(mod 9) = 2 --> y(mod x) to reszta z dzielenia y/x
+Kolejne wartości reszt będą wynosić: 4,8,7,5,1 odwiedzone = [1,2,4,8,7,5].
+Przy następnym wywołaniu funkcji znajdzCykl reszta = 1, wartość ta znajduje się już w tablicy odwiedzone, więc zostanie zwrócona wartość:
+liczba_iteracji - index reszta odwiedzone--> index to funkcja, która zwraca index elementu o wartości reszta w tablicy odwiedzone, czyli ile mnożeń wcześniej wystąpił powtórzony element). Jest długość okresu.
+
+Dostajemy listę:
+okresy=[(1, 2, 0), (1, 3, 2), (1, 4, 0), (1, 5, 4), (1, 6, 2), (1, 7, 3), (1, 8, 0), (1, 9, 6)]
+
+3)maxOkres = maximum [dl | (_, _, dl) <- okresy]
+Do maxOkres przypisujemy warotśc najdłuższego za znalezionych okresów.
+
+4) maxUlamki = [(l, m, dl) | (l, m, dl) <- okresy, dl == maxOkres]
+Tworzymy nową listę do której przepisujemy te elementy z listy okresy, których długość okresu = maxOkres.
+maxUlamki = [(1, 9, 6)]
+
+5) in [formatRozwiniecie l m dl | (l, m, dl) <- maxUlamki]
+Wyznaczamy rozwinięcie binarne, algorytm jest podobny do tego z punktu 2) (funkcja binarneRozwiniecie), ale nie trzeba obliczać już długości okresu:
+Mnożymy razy dwa, jeśli wynik przekroczy 9 kolejna cyfra to 1, dalej przepisujemy wynik(mod 9).
+1|9 *2
+2|9 -> 0
+4|9 -> 0
+8|9 -> 0
+7|9 -> 1
+5|9 -> 1
+1|9 -> 1 --> powtórka '1' - koniec
+Na koniec formatujemy końcowy rezulatat, dodajemy "0." na początku oraz oznaczamy okres nawiasami. 
+
+
+
+
+
